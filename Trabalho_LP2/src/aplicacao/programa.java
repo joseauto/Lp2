@@ -1,17 +1,21 @@
 package aplicacao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import db.DB;
+import Entidades.clientes;
+import dao.ClienteDao;
+import dao.impl.FactoryDao;
 
 public class programa {
 
 	public static void main(String[] args) {
-		Connection conn = null;
+		
+		ClienteDao clienteDao = FactoryDao.createClienteDao();
+		
+		clientes cliente = ClienteDao.findById(3);
+		
+		System.out.println(clientes);
+		
+		
+	/*	Connection conn = null;
 		PreparedStatement st = null;
 		try {
 			conn = DB.getConnection();
@@ -45,5 +49,6 @@ public class programa {
 			DB.closeStatement(st);
 			DB.closeConnection();
 		}
-	}		
+	*/
+		}		
 }

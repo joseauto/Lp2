@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import Entidades.Jogos;
 import dao.JogosDAO;
@@ -16,9 +14,15 @@ import db.DB;
 import db.DbException;
 
 public class JogosDaoJDBC implements JogosDAO{
-
+	
+	private Connection conn;
+	
+	public JogosDaoJDBC(Connection conn) {
+		this.conn = conn;
+	}
+	
 	@Override
-	public void insert(Jogos obj) {
+	public void insert(Jogos jogos) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement("INSERT INTO jogos " + "(Nome, plataforma, genero, preco) " + "VALUES (?, ?, ?, ?)",
@@ -26,7 +30,7 @@ public class JogosDaoJDBC implements JogosDAO{
 			st.setString(1, jogos.getNome());
 			st.setString(2, jogos.getPlataforma());
 			st.setString(3, jogos.getGenero());
-			st.setDouble(3, Jogos.getPreco());
+			st.setDouble(3, jogos.getPreco());
 			
 			int linhasAfetadas = st.executeUpdate();
 			
@@ -34,7 +38,7 @@ public class JogosDaoJDBC implements JogosDAO{
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					Jogos.setId_jogos(id);
+					jogos.setId_jogos(id);
 				}
 				DB.closeResultSet(rs);
 			}
@@ -52,7 +56,7 @@ public class JogosDaoJDBC implements JogosDAO{
 	}
 
 	@Override
-	public void update(Jogos obj) {
+	public void update(Jogos jogos) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement("UPDATE jogos " + "SET Nome = ?, Plataforma = ?, Genero = ?, Preco = ?" + "WHERE id_jogos = ? "); 
